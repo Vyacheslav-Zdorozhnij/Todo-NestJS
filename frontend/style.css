@@ -1,0 +1,185 @@
+body {
+    height: 100%;
+}
+
+.h1-title {
+    display: flex;
+    justify-content: center;
+    margin-right: 35px;
+}
+
+.content-addTask {
+    display: flex;
+    justify-content: center;
+}
+
+.input-todo {
+    margin-right: 5px;
+    border-radius: 5px;
+    border: solid 1px;
+}
+
+.all-checked {
+    margin-right: 5px;
+    width: 20px;
+}
+
+.text-checkdox {
+    margin-bottom: 0px;
+}
+
+.content-todos {
+    margin-right: 65px;
+    display: flex;
+    justify-content: center;
+}
+
+.content-todo {
+    display: flex;
+}
+
+.check-box {
+    margin-top: 10px;
+    margin-right: 5px;
+    width: 30px;
+}
+
+.check-all {
+    margin-right: 25px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.text-todo {
+    padding-left: 40px;
+    width: 500px;
+    min-height: auto;
+    max-height: 228px;
+    margin-top: 10px;
+    display: inline-flex;
+    padding-left: 10px;
+    align-items: center;
+    list-style-type: none;
+    background-color: #dbd2f5;
+    border-radius: 5px;
+    overflow: hidden;
+    word-wrap: anywhere;
+    overflow-y:auto
+}
+
+.first-message {
+    margin-top: 50px;
+    margin-left: 85px;
+    font-size: 25px;
+}
+
+.delete-btn {
+    height: 50px;
+    width: 50px;
+    margin-top: 10px;
+    border: 1px;
+    padding: 1px;
+    margin-left: 5px;
+    border-radius: 5px;
+    background-color: #c1c1c1;
+}
+
+.delete-btn:hover {
+    height: 50px;
+    width: 50px;
+    margin-top: 10px;
+    border: 1px;
+    padding: 1px;
+    margin-left: 5px;
+    border-radius: 5px;
+    background-color: red;
+    color: white;
+}
+
+.info-todos {
+    display: flex;
+    justify-content: center;
+    margin-right: -16px;
+}
+
+.all-todo {
+    width: 117px;
+    height: 40px;
+    padding: 0px;
+    border: solid 1px;
+    margin-right: 40px;
+    border-radius: 3px;
+}
+
+.active-todo {
+    width: 117px;
+    height: 40px;
+    padding: 0px;
+    border: solid 1px;
+    margin-right: 40px;
+    border-radius: 3px;
+}
+
+.completed-todo {
+    width: 117px;
+    height: 40px;
+    padding: 0px;
+    border: solid 1px;
+    margin-right: 40px;
+    border-radius: 3px;
+}
+
+.no-active {
+    width: 117px;
+    height: 40px;
+    padding: 0px;
+    border: solid 1px;
+    margin-right: 40px;
+    border-radius: 3px;
+    color: black;
+    background-color: #f1ecec;
+}
+
+.active-type-task {
+    width: 117px;
+    height: 40px;
+    padding: 0px;
+    border: solid 1px;
+    margin-right: 40px;
+    border-radius: 3px;
+    background-color: #0d6efd;
+    color: white;
+}
+
+.pg-btn-page {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    border-radius: 100px;
+    border: solid 1px;
+}
+
+.pg-content {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    flex-flow: wrap;
+    gap: 5px;
+}
+
+.pg-btn-page-active {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    border-radius: 100px;
+    border: solid 1px;
+    background-color: #8d18c9;
+    color: white;
+}
+
+.btn-danger {
+    margin-left: 50%;
+    margin-top: 15px;
+    transform: translate(-50%, 0%);
+}
