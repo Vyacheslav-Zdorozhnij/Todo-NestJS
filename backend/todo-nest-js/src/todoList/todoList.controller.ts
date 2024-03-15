@@ -9,36 +9,38 @@ import {
   Delete,
 } from '@nestjs/common';
 import { TaskService } from './todoList.service';
-import { CreateTaskDto } from './dto/create-taskDto';
+import { CheckAllTodo, CreateTaskDto } from './dto/create-taskDto';
 
 @Controller('/tasks')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
-  @Post()
+  @Post('/add')
   createTask(@Body() taskDto: CreateTaskDto) {
+    console.log('CONTROLLER DTO > ', taskDto);
     return this.taskService.createTask(taskDto);
   }
-  @Get()
+  @Get('/all')
   getAll() {
     return this.taskService.getAllTask();
   }
 
-  @Patch(':id')
-  update(@Param('id') id: bigint, @Body() taskDto: CreateTaskDto) {
+  @Put('update/:id')
+  update(@Param('id') id: number, @Body() taskDto: CreateTaskDto) {
+    console.log('UPDATE>',taskDto);
     return this.taskService.updateTask(id, taskDto);
   }
 
-  @Put('/update-all-tasks-status')
-  updateAllTasks(@Body() taskDto: CreateTaskDto) {
+  @Put('/update-all-status')
+  updateAllTasks(@Body() taskDto: CheckAllTodo) {
     return this.taskService.updateAllTasksStatus(taskDto);
   }
 
   @Delete('/delete/:id')
-  remove(@Param('id') id: bigint) {
+  remove(@Param('id') id: number) {
     return this.taskService.deleteTask(id);
   }
 
-  @Delete('/deleteAllComplited')
+  @Delete('/delete-all-complited')
   deleteAll() {
     return this.taskService.deleteAllTasks();
   }

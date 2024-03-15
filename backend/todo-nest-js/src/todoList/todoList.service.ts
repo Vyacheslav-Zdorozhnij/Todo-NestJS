@@ -1,13 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Tasks } from 'src/model/taskModel';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateTaskDto } from './dto/create-taskDto';
+import { CheckAllTodo, CreateTaskDto } from './dto/create-taskDto';
 
 @Injectable()
 export class TaskService {
   constructor(@InjectModel(Tasks) private tasksRepository: typeof Tasks) {}
 
   async createTask(dto: CreateTaskDto) {
+    console.log('DTO SERVICE> ', dto);
     const task = await this.tasksRepository.create(dto);
     return task;
   }
@@ -17,7 +18,8 @@ export class TaskService {
     return tasks;
   }
 
-  async updateTask(id: bigint, dto: CreateTaskDto) {
+  async updateTask(id: number, dto: CreateTaskDto) {
+    console.log('updateTask >',dto);
     try {
       const newTask = await this.tasksRepository.update(
         { text: dto.text, isCompleted: dto.isCompleted },
@@ -29,7 +31,7 @@ export class TaskService {
     }
   }
 
-  async updateAllTasksStatus(dto: CreateTaskDto) {
+  async updateAllTasksStatus(dto: CheckAllTodo) {
     const updateStatusTask = await this.tasksRepository.update(
       { isCompleted: dto.isCompleted },
       { where: {} },
@@ -37,8 +39,9 @@ export class TaskService {
     return updateStatusTask;
   }
 
-  async deleteTask(id: bigint) {
+  async deleteTask(id: number) {
     try {
+      console.log('Delete Task Service>> ', id);
       const task = await this.tasksRepository.destroy({ where: { id } });
       return task;
     } catch (error) {

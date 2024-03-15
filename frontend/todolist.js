@@ -11,12 +11,144 @@ const deleteAllCompletedTodo = document.querySelector(".btn-danger");
 const numberOfTasksDisplayed = 5;
 const escapeKey = "Escape";
 const enterKey = "Enter";
-
+// 1renderTodo();
 let statePageToDo = "All";
 let thisPage = 1;
 let lastPage = 1;
 let todoList = [];
 
+async function addTask(data) {
+  try {
+    const response = await fetch("http://localhost:4001/tasks/add", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (response.ok) {
+      return true;
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+async function getAllTodos() {
+  try {
+    const response = await fetch("http://localhost:4001/tasks/all", {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+    if (response.status === 200) {
+      const result = await response.json();
+      // todoList = result;
+      return result;
+    }
+  } catch (error) {
+    console.log("There was a problem with the request", error);
+  }
+}
+
+async function updateTask(data) {
+  try {
+    const response = await fetch(
+      `http://localhost:4001/tasks/update/${+data.id}`,
+      {
+        method: "PUT",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: +data.id,
+          text: data.text,
+          isCompleted: data.isCompleted,
+        }),
+      }
+    );
+
+    if (response.ok) {
+      return true;
+    }
+  } catch (error) {
+    console.log("Update Failed!", error);
+  }
+}
+
+async function updateAllTaskStatus(state) {
+  try {
+    const response = await fetch(
+      "http://localhost:4001/tasks/update-all-status",
+      {
+        method: "PUT",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isCompleted: state }),
+      }
+    );
+
+    if (response.ok) {
+      return true;
+    }
+  } catch (error) {
+    console.log("Update Failed!", error);
+  }
+}
+
+async function deleteTodo(id) {
+  try {
+    const response = await fetch(`http://localhost:4001/tasks/delete/${id}`, {
+      method: "DELETE",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id }),
+    });
+
+    if (response.ok) {
+      return true;
+    }
+  } catch (error) {
+    console.log("Update Failed!", error);
+  }
+}
+
+async function deleteAllComplitedTodo() {
+  try {
+    const response = await fetch(
+      "http://localhost:4001/tasks/delete-all-complited",
+      {
+        method: "DELETE",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.ok) {
+      return true;
+    }
+  } catch (error) {
+    alert("Delete failed!");
+  }
+}
+function rerenderTask() {
+  getAllTodos().then((array) => {
+    todoList = array;
+    console.log("getArray", todoList);
+
+    renderTodo();
+  });
+}
+rerenderTask();
 function firstMessage() {
   if (todoList.length === 0) {
     document.querySelector(".first-message").style.display = "block";
@@ -38,10 +170,13 @@ function statePage(newPage) {
 }
 
 function getIndexArray(id) {
-  const indexArray = todoList.findIndex((element) => element.id === Number(id));
+  const indexArray = todoList.findIndex(
+    (element) => Number(element.id) === Number(id)
+  );
   if (indexArray !== -1) {
     return indexArray;
   }
+  alert(`${id} is not in the array`);
 }
 
 function clearTodos() {
@@ -51,16 +186,19 @@ function clearTodos() {
 function addTodoInArray() {
   const textToDo = inputElement.value.replace(/\s+/g, " ").trim();
   if (textToDo !== "") {
-    todoList.push({ id: Date.now(), todoText: textToDo, status: false });
+    const data = { id: Date.now(), text: textToDo, isCompleted: false };
+    addTask(data).then((data) => renderAllToDo());
   }
   thisPage = Math.ceil(todoList.length / numberOfTasksDisplayed);
-  renderAllToDo();
+
   statePage(thisPage);
   firstMessage();
 }
 
 function filterCountTodo() {
-  const activeTasks = todoList.filter((element) => element.status === false);
+  const activeTasks = todoList.filter(
+    (element) => element.isCompleted === false
+  );
   const complitedTasks = todoList.length - activeTasks.length;
   allTodoBtnElement.textContent = `All(${todoList.length})`;
   activeTodoBtnElement.textContent = `Active(${activeTasks.length})`;
@@ -71,65 +209,70 @@ function createDivTextTodo(textTodo, id) {
   const spanElementTextTodo = document.createElement("span");
   spanElementTextTodo.id = id;
   spanElementTextTodo.className = "text-todo";
-  const todoText = document.createTextNode(textTodo);
-  spanElementTextTodo.appendChild(todoText);
+  const text = document.createTextNode(textTodo);
+  spanElementTextTodo.appendChild(text);
   return spanElementTextTodo;
 }
 
 function changeTaskState(e) {
   const idTodo = e.target.id;
-  const taskToChange = todoList.find((element) => element.id === +idTodo);
+  const taskToChange = todoList.find(
+    (element) => Number(element.id) === Number(idTodo)
+  );
   if (taskToChange) {
-    taskToChange.status = !taskToChange.status;
+    taskToChange.isCompleted = !taskToChange.isCompleted;
+    updateTask(taskToChange).then(() => rerenderTask());
   }
-  renderTodo();
+  // renderTodo();
 }
 
-function createCheckBox(id, status) {
+function createCheckBox(id, isCompleted) {
   const inputElement = document.createElement("input");
   inputElement.id = id;
   inputElement.className = "check-box";
   inputElement.setAttribute("type", "checkbox");
-  inputElement.checked = status;
+  inputElement.checked = isCompleted;
   inputElement.addEventListener("click", changeTaskState);
   return inputElement;
 }
 
 function deleteTask(e) {
   const { id } = e.target;
-  todoList.splice(getIndexArray(id), 1);
-  renderTodo();
+  // todoList.splice(getIndexArray(id), 1);
+  deleteTodo(Number(id)).then(() => rerenderTask());
+
+  // renderTodo();
 }
 
 function createDeleteButton(idTodo) {
   const deleteButton = document.createElement("button");
   deleteButton.className = "delete-btn";
   deleteButton.id = idTodo;
-  const todoText = document.createTextNode("X");
-  deleteButton.appendChild(todoText);
+  const text = document.createTextNode("X");
+  deleteButton.appendChild(text);
   deleteButton.addEventListener("click", deleteTask);
   return deleteButton;
 }
 
-function createDivContentTodo(textTodo, id, status) {
+function createDivContentTodo(textTodo, id, isCompleted) {
   const divElementContent = document.createElement("div");
   divElementContent.id = id;
   divElementContent.className = "content-todo";
   const divText = createDivTextTodo(textTodo, id);
-  divElementContent.append(createCheckBox(id, status));
+  divElementContent.append(createCheckBox(id, isCompleted));
   divElementContent.append(divText);
   divElementContent.append(createDeleteButton(id));
   return divElementContent;
 }
 
-function createTodo(textTodo, id, status) {
+function createTodo(id, textTodo, isCompleted) {
   const TodoList = document.querySelector(".todo-list");
-  const divContent = createDivContentTodo(textTodo, id, status);
+  const divContent = createDivContentTodo(textTodo, id, isCompleted);
   TodoList.append(divContent);
 }
 
 function changeTaskText(liTaskElement) {
-  const inputElement = document.createElement("textArea"); //textArea
+  const inputElement = document.createElement("textArea");
   inputElement.style = "height:228px";
   inputElement.className = "text-todo";
   inputElement.type = "text";
@@ -139,28 +282,36 @@ function changeTaskText(liTaskElement) {
 
   function saveСhanges() {
     if (inputElement.value.trim() === "") {
-      renderTodo();
+      rerenderTask();
+      //renderTodo();
     } else {
-      todoList[getIndexArray(liTaskElement.id)].todoText = inputElement.value
+      todoList[getIndexArray(liTaskElement.id)].text = inputElement.value
         .replace(/\s+/g, " ")
         .trim();
-      renderTodo();
+
+      const data = todoList.find((item) => +item.id === +liTaskElement.id);
+      updateTask(data).then((value) => rerenderTask());
+      // renderTodo();
     }
   }
 
   function handleKeyPressSaveOrCancel(event) {
     if (event.key === escapeKey) {
       inputElement.removeEventListener("blur", saveСhanges);
-      renderTodo();
+      rerenderTask();
+      //renderTodo();
     }
     if (event.key === enterKey) {
       if (inputElement.value.trim() === "") {
-        renderTodo();
+        rerenderTask();
+        //renderTodo();
       } else {
-        todoList[getIndexArray(liTaskElement.id)].todoText = inputElement.value
+        todoList[getIndexArray(liTaskElement.id)].text = inputElement.value
           .replace(/\s+/g, " ")
           .trim();
-        renderTodo();
+        const data = todoList.find((item) => +item.id === +liTaskElement.id);
+        updateTask(data).then((value) => rerenderTask());
+        //renderTodo();
       }
     }
   }
@@ -182,9 +333,8 @@ function renderAllToDo() {
   allTodoBtnElement.classList.add("active-type-task");
   statePageToDo = "All";
   thisPage = Math.ceil(filterArray().length / numberOfTasksDisplayed);
-  console.log("1", thisPage);
-  renderTodo();
-  console.log("1", thisPage);
+  rerenderTask();
+  // renderTodo();
 }
 
 function renderActiveToDo() {
@@ -192,7 +342,8 @@ function renderActiveToDo() {
   activeTodoBtnElement.classList.add("active-type-task");
   statePageToDo = "Active";
   thisPage = Math.ceil(filterArray().length / numberOfTasksDisplayed);
-  renderTodo();
+  rerenderTask();
+  //renderTodo();
 }
 
 function renderCompletedToDo() {
@@ -200,7 +351,8 @@ function renderCompletedToDo() {
   completedTodoBtnElement.classList.add("active-type-task");
   statePageToDo = "Completed";
   thisPage = Math.ceil(filterArray().length / numberOfTasksDisplayed);
-  renderTodo();
+  rerenderTask();
+  //renderTodo();
 }
 
 function createElementPagination(page) {
@@ -234,32 +386,36 @@ function filterArray() {
       return true;
     }
     if (statePageToDo === "Active") {
-      return !element.status;
+      return !element.isCompleted;
     }
     if (statePageToDo === "Completed") {
-      return element.status;
+      return element.isCompleted;
     }
   });
   return todolistFilter;
 }
 
 function changeAllTaskState(checkedState) {
+  /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   todoList.forEach((element) => {
-    element.status = checkedState;
+    element.isCompleted = checkedState;
   });
-  renderTodo();
+  updateAllTaskStatus(checkedState);
+  rerenderTask();
+  //renderTodo();
 }
 
 function checkClicks(e) {
   if (e.target.className === "pg-btn-page") {
     thisPage = Number(e.target.textContent);
     statePage(thisPage);
-    renderTodo();
+    rerenderTask();
+    //renderTodo();
   }
 }
 
 function addCheckIfAllElementsChecked() {
-  const result = todoList.every((element) => element.status === true);
+  const result = todoList.every((element) => element.isCompleted === true);
   if (result) {
     allChecked.checked = true;
   } else {
@@ -268,8 +424,10 @@ function addCheckIfAllElementsChecked() {
 }
 
 function deleteAllCompleted() {
-  todoList = todoList.filter((element) => element.status !== true);
-  renderTodo();
+  // todoList = todoList.filter((element) => element.isCompleted !== true);/////////////////////////////////////////////////////
+  deleteAllComplitedTodo();
+  rerenderTask();
+  //renderTodo();
 }
 
 function paginationActivePage() {
@@ -287,7 +445,7 @@ function renderTodo() {
   const filteredArray = filterArray();
   const paginatedArray = listTasksForCurrentPage(thisPage, filteredArray);
   paginatedArray.forEach((element) => {
-    createTodo(element.todoText, Number(element.id), element.status);
+    createTodo(Number(element.id), element.text, element.isCompleted);
   });
   pagination();
   addCheckIfAllElementsChecked();
@@ -311,16 +469,16 @@ function toggleAllTasks(e) {
 }
 
 function handlerAddInTodoArray() {
+  rerenderTask();
   addTodoInArray();
-  renderTodo();
 }
 
 function handleEnterKeyPress(e) {
   if (e.code === enterKey) {
     addTodoInArray();
-    renderTodo();
   }
 }
+
 buttonElement.addEventListener("click", handlerAddInTodoArray);
 
 inputElement.addEventListener("keypress", handleEnterKeyPress);

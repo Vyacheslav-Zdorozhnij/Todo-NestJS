@@ -2,8 +2,8 @@ import { DataType, Model, Table, Column } from 'sequelize-typescript';
 
 @Table({ tableName: 'tasks' })
 export class Tasks extends Model<Tasks> {
-  @Column({ type: DataType.BIGINT, unique: true, primaryKey: true })
-  id: bigint;
+  @Column({ type: DataType.INTEGER, unique: true, primaryKey: true })
+  id: number;
 
   @Column({ type: DataType.STRING, allowNull: false })
   text: string;
