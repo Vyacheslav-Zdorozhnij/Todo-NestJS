@@ -7,19 +7,19 @@ import { CheckAllTodo, CreateTaskDto } from './dto/create-taskDto';
 export class TaskService {
   constructor(@InjectModel(Tasks) private tasksRepository: typeof Tasks) {}
 
+  async getAllTask() {
+    const tasks = await this.tasksRepository.findAll();
+    return tasks;
+  }
+
   async createTask(dto: CreateTaskDto) {
     console.log('DTO SERVICE> ', dto);
     const task = await this.tasksRepository.create(dto);
     return task;
   }
 
-  async getAllTask() {
-    const tasks = await this.tasksRepository.findAll();
-    return tasks;
-  }
-
   async updateTask(id: number, dto: CreateTaskDto) {
-    console.log('updateTask >',dto);
+    console.log('updateTask >', dto);
     try {
       const newTask = await this.tasksRepository.update(
         { text: dto.text, isCompleted: dto.isCompleted },

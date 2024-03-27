@@ -5,7 +5,6 @@ import {
   Post,
   Param,
   Put,
-  Patch,
   Delete,
 } from '@nestjs/common';
 import { TaskService } from './todoList.service';
@@ -14,14 +13,16 @@ import { CheckAllTodo, CreateTaskDto } from './dto/create-taskDto';
 @Controller('/tasks')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
+
+  @Get('/all')
+  getAll() {
+    return this.taskService.getAllTask();
+  }
+
   @Post('/add')
   createTask(@Body() taskDto: CreateTaskDto) {
     console.log('CONTROLLER DTO > ', taskDto);
     return this.taskService.createTask(taskDto);
-  }
-  @Get('/all')
-  getAll() {
-    return this.taskService.getAllTask();
   }
 
   @Put('update/:id')
