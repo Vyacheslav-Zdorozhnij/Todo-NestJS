@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { TodoListModule } from './todoList/todoList.module';
 import { Tasks } from './model/taskModel';
@@ -9,19 +9,20 @@ import { Tasks } from './model/taskModel';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
     }),
     SequelizeModule.forRootAsync({
-      useFactory: () => ({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
         dialect: 'postgres',
-        host: process.env.POSTGRES_HOST,
-        port: Number(process.env.POSTGRES_PORT),
-        username: process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD,
-        database: process.env.POSTGRES_DB,
+        host: configService.get('POSTGRES_HOST'),
+        port: configService.get('POSTGRES_PORT'),
+        username: configService.get('POSTGRES_USER'),
+        password: configService.get('POSTGRES_PASSWORD'),
+        database: configService.get('POSTGRES_DB'),
         models: [Tasks],
         autoLoadModels: true,
       }),
+      inject: [ConfigService],
     }),
     TodoListModule,
   ],

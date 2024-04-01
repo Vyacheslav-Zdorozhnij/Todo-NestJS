@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Tasks } from 'src/model/taskModel';
 import { InjectModel } from '@nestjs/sequelize';
+
+import { Tasks } from 'src/model/taskModel';
 import { CheckAllTodo, CreateTaskDto } from './dto/create-taskDto';
 
 @Injectable()

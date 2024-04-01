@@ -65,7 +65,7 @@ body {
     border-radius: 5px;
     overflow: hidden;
     word-wrap: anywhere;
-    overflow-y:auto
+    overflow-y: auto
 }
 
 .first-message {
@@ -106,7 +106,7 @@ body {
 .all-todo {
     width: 117px;
     height: 40px;
-    padding: 0px;
+    padding: 0;
     border: solid 1px;
     margin-right: 40px;
     border-radius: 3px;
@@ -115,7 +115,7 @@ body {
 .active-todo {
     width: 117px;
     height: 40px;
-    padding: 0px;
+    padding: 0;
     border: solid 1px;
     margin-right: 40px;
     border-radius: 3px;
@@ -124,7 +124,7 @@ body {
 .completed-todo {
     width: 117px;
     height: 40px;
-    padding: 0px;
+    padding: 0;
     border: solid 1px;
     margin-right: 40px;
     border-radius: 3px;
@@ -133,7 +133,7 @@ body {
 .no-active {
     width: 117px;
     height: 40px;
-    padding: 0px;
+    padding: 0;
     border: solid 1px;
     margin-right: 40px;
     border-radius: 3px;
@@ -144,7 +144,7 @@ body {
 .active-type-task {
     width: 117px;
     height: 40px;
-    padding: 0px;
+    padding: 0;
     border: solid 1px;
     margin-right: 40px;
     border-radius: 3px;

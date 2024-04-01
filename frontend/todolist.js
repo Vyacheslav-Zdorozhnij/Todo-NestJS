@@ -36,7 +36,7 @@ async function addTask(data) {
 }
 async function getAllTodos() {
   try {
-    const response = await fetch("http://localhost:4001/api/tasks/", {
+    const response = await fetch("http://localhost:4001/tasks/", {
       method: "GET",
       mode: "cors",
       headers: {
@@ -54,21 +54,18 @@ async function getAllTodos() {
 
 async function updateTask(data) {
   try {
-    const response = await fetch(
-      `http://localhost:4001/api/tasks/${+data.id}`,
-      {
-        method: "PUT",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: +data.id,
-          text: data.text,
-          isCompleted: data.isCompleted,
-        }),
-      }
-    );
+    const response = await fetch(`http://localhost:4001/tasks/${+data.id}`, {
+      method: "PUT",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: +data.id,
+        text: data.text,
+        isCompleted: data.isCompleted,
+      }),
+    });
 
     if (response.ok) {
       return true;
@@ -80,7 +77,7 @@ async function updateTask(data) {
 
 async function updateAllTaskStatus(state) {
   try {
-    const response = await fetch("http://localhost:4001/api/tasks/", {
+    const response = await fetch("http://localhost:4001/tasks/", {
       method: "PUT",
       mode: "cors",
       headers: {
@@ -99,7 +96,7 @@ async function updateAllTaskStatus(state) {
 
 async function deleteTodo(id) {
   try {
-    const response = await fetch(`http://localhost:4001/api/tasks/${id}`, {
+    const response = await fetch(`http://localhost:4001/tasks/${id}`, {
       method: "DELETE",
       mode: "cors",
       headers: {
@@ -118,7 +115,7 @@ async function deleteTodo(id) {
 
 async function deleteAllComplitedTodo() {
   try {
-    const response = await fetch("http://localhost:4001/api/tasks/", {
+    const response = await fetch("http://localhost:4001/tasks/", {
       method: "DELETE",
       mode: "cors",
       headers: {
