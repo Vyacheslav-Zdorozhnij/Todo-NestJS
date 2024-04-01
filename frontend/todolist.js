@@ -68,7 +68,7 @@ async function updateTask(data) {
           text: data.text,
           isCompleted: data.isCompleted,
         }),
-      }
+      },
     );
 
     if (response.ok) {

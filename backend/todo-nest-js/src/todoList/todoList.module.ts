@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { SequelizeModule } from '@nestjs/sequelize';
+
 import { TaskController } from './todoList.controller';
 import { TaskService } from './todoList.service';
-import { SequelizeModule } from '@nestjs/sequelize';
 import { Tasks } from 'src/model/taskModel';
 
 @Module({

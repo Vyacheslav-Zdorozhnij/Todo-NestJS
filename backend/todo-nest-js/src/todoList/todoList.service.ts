@@ -8,18 +8,24 @@ export class TaskService {
   constructor(@InjectModel(Tasks) private tasksRepository: typeof Tasks) {}
 
   async getAllTask() {
-    const tasks = await this.tasksRepository.findAll();
-    return tasks;
+    try {
+      const tasks = await this.tasksRepository.findAll();
+      return tasks;
+    } catch (error) {
+      throw new NotFoundException(`Not found`);
+    }
   }
 
   async createTask(dto: CreateTaskDto) {
-    console.log('DTO SERVICE> ', dto);
-    const task = await this.tasksRepository.create(dto);
-    return task;
+    try {
+      const task = await this.tasksRepository.create(dto);
+      return task;
+    } catch (error) {
+      throw new NotFoundException(`Task with task  not created`);
+    }
   }
 
   async updateTask(id: number, dto: CreateTaskDto) {
-    console.log('updateTask >', dto);
     try {
       const newTask = await this.tasksRepository.update(
         { text: dto.text, isCompleted: dto.isCompleted },
@@ -32,16 +38,19 @@ export class TaskService {
   }
 
   async updateAllTasksStatus(dto: CheckAllTodo) {
-    const updateStatusTask = await this.tasksRepository.update(
-      { isCompleted: dto.isCompleted },
-      { where: {} },
-    );
-    return updateStatusTask;
+    try {
+      const updateStatusTask = await this.tasksRepository.update(
+        { isCompleted: dto.isCompleted },
+        { where: {} },
+      );
+      return updateStatusTask;
+    } catch (error) {
+      throw new NotFoundException(`Task with tasks not found`);
+    }
   }
 
   async deleteTask(id: number) {
     try {
-      console.log('Delete Task Service>> ', id);
       const task = await this.tasksRepository.destroy({ where: { id } });
       return task;
     } catch (error) {
@@ -50,11 +59,15 @@ export class TaskService {
   }
 
   async deleteAllTasks() {
-    const deleteAllTask = await this.tasksRepository.destroy({
-      where: {
-        isCompleted: true,
-      },
-    });
-    return deleteAllTask;
+    try {
+      const deleteAllTask = await this.tasksRepository.destroy({
+        where: {
+          isCompleted: true,
+        },
+      });
+      return deleteAllTask;
+    } catch (error) {
+      throw new NotFoundException(`Task with tasks not found`);
+    }
   }
 }

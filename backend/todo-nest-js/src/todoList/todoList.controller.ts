@@ -7,40 +7,40 @@ import {
   Put,
   Delete,
 } from '@nestjs/common';
+
 import { TaskService } from './todoList.service';
 import { CheckAllTodo, CreateTaskDto } from './dto/create-taskDto';
 
-@Controller('/tasks')
+@Controller('/api')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
-  @Get('/all')
+  @Get('/tasks')
   getAll() {
     return this.taskService.getAllTask();
   }
 
-  @Post('/add')
+  @Post('/tasks')
   createTask(@Body() taskDto: CreateTaskDto) {
-    console.log('CONTROLLER DTO > ', taskDto);
     return this.taskService.createTask(taskDto);
   }
 
-  @Put('update/:id')
+  @Put('tasks/:id')
   update(@Param('id') id: number, @Body() taskDto: CreateTaskDto) {
     return this.taskService.updateTask(id, taskDto);
   }
 
-  @Put('/update-all-status')
+  @Put('/tasks/:id')
   updateAllTasks(@Body() taskDto: CheckAllTodo) {
     return this.taskService.updateAllTasksStatus(taskDto);
   }
 
-  @Delete('/delete/:id')
+  @Delete('/tasks/:id')
   remove(@Param('id') id: number) {
     return this.taskService.deleteTask(id);
   }
 
-  @Delete('/delete-all-complited')
+  @Delete('/tasks')
   deleteAll() {
     return this.taskService.deleteAllTasks();
   }
