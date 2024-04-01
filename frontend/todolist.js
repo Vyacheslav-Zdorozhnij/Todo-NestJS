@@ -19,7 +19,7 @@ let todoList = [];
 
 async function addTask(data) {
   try {
-    const response = await fetch("http://localhost:4001/tasks/add", {
+    const response = await fetch("http://localhost:4001/api/tasks/", {
       method: "POST",
       mode: "cors",
       headers: {
@@ -36,7 +36,7 @@ async function addTask(data) {
 }
 async function getAllTodos() {
   try {
-    const response = await fetch("http://localhost:4001/tasks/all", {
+    const response = await fetch("http://localhost:4001/api/tasks/", {
       method: "GET",
       mode: "cors",
       headers: {
@@ -45,7 +45,6 @@ async function getAllTodos() {
     });
     if (response.status === 200) {
       const result = await response.json();
-      // todoList = result;
       return result;
     }
   } catch (error) {
@@ -56,7 +55,7 @@ async function getAllTodos() {
 async function updateTask(data) {
   try {
     const response = await fetch(
-      `http://localhost:4001/tasks/update/${+data.id}`,
+      `http://localhost:4001/api/tasks/${+data.id}`,
       {
         method: "PUT",
         mode: "cors",
@@ -68,7 +67,7 @@ async function updateTask(data) {
           text: data.text,
           isCompleted: data.isCompleted,
         }),
-      },
+      }
     );
 
     if (response.ok) {
@@ -81,17 +80,14 @@ async function updateTask(data) {
 
 async function updateAllTaskStatus(state) {
   try {
-    const response = await fetch(
-      "http://localhost:4001/tasks/update-all-status",
-      {
-        method: "PUT",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ isCompleted: state }),
-      }
-    );
+    const response = await fetch("http://localhost:4001/api/tasks/", {
+      method: "PUT",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ isCompleted: state }),
+    });
 
     if (response.ok) {
       return true;
@@ -103,7 +99,7 @@ async function updateAllTaskStatus(state) {
 
 async function deleteTodo(id) {
   try {
-    const response = await fetch(`http://localhost:4001/tasks/delete/${id}`, {
+    const response = await fetch(`http://localhost:4001/api/tasks/${id}`, {
       method: "DELETE",
       mode: "cors",
       headers: {
@@ -122,16 +118,13 @@ async function deleteTodo(id) {
 
 async function deleteAllComplitedTodo() {
   try {
-    const response = await fetch(
-      "http://localhost:4001/tasks/delete-all-complited",
-      {
-        method: "DELETE",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch("http://localhost:4001/api/tasks/", {
+      method: "DELETE",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (response.ok) {
       return true;
